@@ -1,0 +1,21 @@
+name: 'Setup CHR'
+description: 'Install CHR (Chromia Runtime) on Ubuntu runners'
+inputs:
+  version:
+    description: 'Version of CHR to install'
+    required: false
+    default: 'latest'
+runs:
+  using: "composite"
+  steps:
+    - name: Install Chr
+      shell: bash
+      run: |
+        curl -fsSL https://apt.chromia.com/chromia.gpg | sudo tee /usr/share/keyrings/chromia.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chromia.gpg] https://apt.chromia.com stable main" | sudo tee /etc/apt/sources.list.d/chromia.list
+        sudo apt-get update
+        if [ "${{ inputs.version }}" = "latest" ]; then
+          sudo apt-get install chr
+        else
+          sudo apt-get install chr=${{ inputs.version }}
+        fi

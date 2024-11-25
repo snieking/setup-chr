@@ -1,0 +1,33 @@
+name: Test Setup CHR
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-latest:
+    name: Test Setup CHR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Setup CHR Action
+        uses: ./.github/actions/setup-chr
+        with:
+          version: 'latest'
+      - name: Test CHR Installation
+        run: |
+          chr --version
+  test-version:
+    name: Test Setup CHR 1.0.0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Setup CHR Action
+        uses: ./.github/actions/setup-chr
+        with:
+          version: '0.21.4'
+      - name: Test CHR Installation
+        run: |
+          chr --version | grep "chr version 0.21.4"
